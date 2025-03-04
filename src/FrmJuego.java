@@ -85,16 +85,16 @@ public class FrmJuego extends JFrame {
 
     private void verificarJugador() {
         int pestañaSeleccionada = tpJugadores.getSelectedIndex();
-        String mensaje = "";
         switch (pestañaSeleccionada) {
             case 0:
-                mensaje = jugador1.getGrupos();
+            JOptionPane.showMessageDialog(null, jugador1.getGrupos());
+            JOptionPane.showMessageDialog(null, jugador1.obtenerEscalera());
                 break;
             case 1:
-                mensaje = jugador2.getGrupos();
+            JOptionPane.showMessageDialog(null, jugador2.getGrupos());
+            JOptionPane.showMessageDialog(null, jugador2.obtenerEscalera());
                 break;
         }
-        JOptionPane.showMessageDialog(null, mensaje);
     }
 
     private void ordenarCartas() {

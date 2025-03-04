@@ -66,37 +66,6 @@ public class Jugador {
             }
         }
 
-
-
-
-/*   INTENTE APLICAR LA MISMA SINTAXIS DEL PROFE PARA BUSCAR LA ESCALERA PERO NO ME DIO (no esta terminada)
-
-        //verificar si hubo Escalera
-        boolean Secuencia = false;
-        for (int contador : contadores) {
-            if (contador >= 2) {
-                Secuencia = true;
-                break;
-            }
-        }
-
-        //Si Secuencia = true haga esto:
-        if (Secuencia) {
-            mensaje += "\n";
-            mensaje += "Se encontraron las siguientes Escaleras: \n";
-            int posicion = 0;
-            for (Carta carta : cartas) {
-                if (contador >= 2) {
-                    
-                    mensaje += Pinta.values()[contador] + " de " + NombreCarta.values()[posicion] + "\n";
-                }
-                posicion++;
-            }
-        }
-*/
-
-
-
         //Para averiguar si NO hay cartas en grupo
         boolean totalGrupos = false;
         for (int contador : contadores) {
@@ -160,6 +129,80 @@ public class Jugador {
 
         return mensaje;
     }
+    
+    public String obtenerEscalera() {
+
+        // Ordenar las cartas por pinta y valor
+        int n = cartas.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                boolean intercambiar = false;
+
+                // Compara las cartas por su pinta primero
+                if (cartas[j].getPinta().ordinal() > cartas[j + 1].getPinta().ordinal()) {
+                    intercambiar = true;
+                }
+                // Si las pintas son iguales, compara por valor
+                else if (cartas[j].getPinta().ordinal() == cartas[j + 1].getPinta().ordinal() &&
+                         cartas[j].getNombre().ordinal() > cartas[j + 1].getNombre().ordinal()) {
+                    intercambiar = true;
+                }
+
+                // Realiza el intercambio si es necesario
+                if (intercambiar) {
+                    Carta temp = cartas[j];
+                    cartas[j] = cartas[j + 1];
+                    cartas[j + 1] = temp;
+                }
+            }
+        }
+
+        // Buscar la secuencia de cartas consecutivas
+        Carta[] escalera = new Carta[TOTAL_CARTAS];
+        int contador = 0;
+        String mensajeEscalera = ""; // Aquí guardaremos el mensaje de la escalera
+
+        for (int i = 0; i < TOTAL_CARTAS - 1; i++) {
+            if (contador == 0) {
+                escalera[contador] = cartas[i];
+                contador++;
+            }
+
+            if (cartas[i].getPinta() == cartas[i + 1].getPinta() &&
+                cartas[i].getNombre().ordinal() + 1 == cartas[i + 1].getNombre().ordinal()) {
+
+                escalera[contador] = cartas[i + 1];
+                contador++;
+
+                // Si encontramos una secuencia válida de 3 o más cartas
+                if (contador >= 3) {
+                    break; // Si encontramos una escalera válida de 3 o más cartas, salimos del ciclo
+                }
+            } else {
+                // La secuencia se rompió, reiniciamos el contador y el arreglo
+                contador = 0;
+            }
+        }
+
+        // Si no se encontró una escalera válida
+        if (contador < 3) {
+            mensajeEscalera = "No se encontró una escalera válida.";
+        } else {
+            // Construir el mensaje de la escalera encontrada
+            String pinta = escalera[0].getPinta().name(); // Obtener la pinta de la primera carta
+            int inicio = escalera[0].getNombre().ordinal(); // Valor de la primera carta
+            int fin = escalera[contador - 1].getNombre().ordinal(); // Valor de la última carta
+
+            // Construir el mensaje
+            mensajeEscalera = "Escalera de " + pinta + " de " +
+                              NombreCarta.values()[inicio].name() + " a " +
+                              NombreCarta.values()[fin].name();
+        }
+
+        return mensajeEscalera;
+    }
+
+    
 
     //Logica para ordenar cartas por su pinta
     public void ordenar(){
